@@ -7,6 +7,21 @@
 	<name>IOF Domain model</name>
 	<packaging>jar</packaging>
 	<description>Simplified domain model for IOF XML files. Simple pojos that can be used by Java and GWT-Java codes. The dtd for iof xml is so complicated that jaxb style generation is almost impossible.</description>
+
+	<build>
+		<resources>
+			<!-- Package this sources and .gwt.xml files to make this compatible with 
+				GWT -->
+			<resource>
+				<directory>src/main/java</directory>
+				<includes>
+					<include>**/*.java</include>
+					<include>**/*.gwt.xml</include>
+				</includes>
+			</resource>
+		</resources>
+	</build>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
