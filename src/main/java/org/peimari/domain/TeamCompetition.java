@@ -2,6 +2,7 @@ package org.peimari.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Set;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.transform.OutputKeys;
 
 @XmlRootElement
 public class TeamCompetition implements Serializable {
@@ -111,9 +113,18 @@ public class TeamCompetition implements Serializable {
 
 				List<ClassResult> classResults = resultList.getClassResults();
 				for (ClassResult classResult : classResults) {
+					if (classResult.getResults().isEmpty()
+							|| classResult.getResults().iterator().next()
+									.getCompetitorStatus() != CompetitorStatus.OK) {
+						// Skip if no results or nobody without ok result
+						continue;
+					}
 					classResult.analyzeSplitTimes();
 					List<Result> results = classResult.getResults();
 					for (Result result : results) {
+						if(result.getCompetitorStatus() != CompetitorStatus.OK) {
+							continue;
+						}
 						if (competingPersons.containsKey(result.getPerson())) {
 							// Switch to person instance that has proper details
 							// for calculations
@@ -167,12 +178,14 @@ public class TeamCompetition implements Serializable {
 							String className = classResult.getClassName();
 							// the meaningful class name id is the one until
 							// first space
-							className = className.substring(0,
-									className.indexOf(" "));
+							int indexOf = className.indexOf(" ");
+							if (indexOf != -1) {
+								className = className.substring(0, indexOf);
+							}
 							Double classReduction = getClassReductions().get(
 									className);
 							if (classReduction != null) {
-								points = classReduction;
+								points += classReduction;
 							} else {
 								teamCompetitionResults
 										.addWarning("No class reductions defined for "
@@ -226,6 +239,22 @@ public class TeamCompetition implements Serializable {
 								personalResults.put(result.getPerson(),
 										personWeekResult);
 							}
+						}
+					}
+				}
+
+				Collection<Person> organizers = e.getOrganizers();
+				for (Person person : organizers) {
+					if (competingPersons.containsKey(person)) {
+						PersonWeekResult personWeekResult = personalResults
+								.get(person);
+						if (personWeekResult == null
+								|| personWeekResult.getPoints() < 25) {
+							personWeekResult = new PersonWeekResult();
+							personWeekResult.setCourse("Järj.");
+							personWeekResult.setPoints(25);
+							personWeekResult.setPos(1);
+							personalResults.put(person, personWeekResult);
 						}
 					}
 				}
