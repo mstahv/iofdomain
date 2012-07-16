@@ -26,7 +26,7 @@ public class SplitTime implements Serializable {
 		this.time = time;
 	}
 
-	public Long getDeltaTime() {
+	public long getDeltaTime() {
 		return deltaTime;
 	}
 

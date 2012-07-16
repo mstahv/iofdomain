@@ -103,8 +103,7 @@ public class ClassResult implements Serializable {
 					SplitTime splitTime = result.getSplitTimes().get(idx);
 					if (last != null
 							&& (deltas ? (last.getDeltaTime() == splitTime
-									.getDeltaTime()) : deltas
-									&& (last.getTime() == splitTime.getTime()))) {
+									.getDeltaTime()) : last.getTime() == splitTime.getTime())) {
 						if (deltas) {
 							splitTime.setDeltaPosition(last.getDeltaPosition());
 						} else {
@@ -117,6 +116,7 @@ public class ClassResult implements Serializable {
 							splitTime.setPosition(j + 1);
 						}
 					}
+					last = splitTime;
 				}
 			}
 		}
