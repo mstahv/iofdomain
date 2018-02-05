@@ -99,11 +99,12 @@ public class ClassResult implements Serializable {
 			SplitTime last = null;
 			for (int j = 0; j < r.size(); j++) {
 				Result result = r.get(j);
-				if(result.getSplitTimes().size() > idx) {
+				if (result.getSplitTimes().size() > idx) {
 					SplitTime splitTime = result.getSplitTimes().get(idx);
 					if (last != null
 							&& (deltas ? (last.getDeltaTime() == splitTime
-									.getDeltaTime()) : last.getTime() == splitTime.getTime())) {
+									.getDeltaTime())
+									: last.getTime() == splitTime.getTime())) {
 						if (deltas) {
 							splitTime.setDeltaPosition(last.getDeltaPosition());
 						} else {
@@ -132,14 +133,18 @@ public class ClassResult implements Serializable {
 			List<SplitTime> splitTimes = r.getSplitTimes();
 			SplitTime lastSplit = null;
 			for (SplitTime splitTime : splitTimes) {
-				// TODO handle missing punches
-				if (lastSplit == null) {
-					splitTime.setDeltaTime(splitTime.getTime());
+				if(splitTime.getTime() == 0) {
+					// handle missing punches
+					splitTime.setDeltaTime(-1l);
 				} else {
-					splitTime.setDeltaTime(splitTime.getTime()
-							- lastSplit.getTime());
+					if (lastSplit == null) {
+						splitTime.setDeltaTime(splitTime.getTime());
+					} else {
+						splitTime.setDeltaTime(splitTime.getTime()
+								- lastSplit.getTime());
+					}
+					lastSplit = splitTime;
 				}
-				lastSplit = splitTime;
 			}
 		}
 	}

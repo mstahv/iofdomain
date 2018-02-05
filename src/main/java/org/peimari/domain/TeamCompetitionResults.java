@@ -20,6 +20,8 @@ public class TeamCompetitionResults  implements Serializable {
 	@XmlTransient
 	private Set<String> warnings = new HashSet<String>();
 	
+	PersonStatistics personStatistics = new PersonStatistics();
+	
 	List<TeamResult> getTeamResults() {
 		return null;
 	}
@@ -40,6 +42,10 @@ public class TeamCompetitionResults  implements Serializable {
 	
 	public Set<String> getWarnings() {
 		return warnings;
+	}
+
+	public PersonStatistics getPersonStatistics() {
+		return personStatistics;
 	}
 
 }

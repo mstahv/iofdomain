@@ -104,6 +104,8 @@ public class TeamCompetition implements Serializable {
 	public TeamCompetitionResults computeResults(ResultListProvider provider) {
 		TeamCompetitionResults teamCompetitionResults = new TeamCompetitionResults();
 		Map<Person, Person> competingPersons = getCompetingPersons();
+
+		PersonOrganizingPointsCounter popc = new PersonOrganizingPointsCounter();
 		for (Event e : getEvents()) {
 			if (e.isResultsVisible()) {
 
@@ -122,7 +124,9 @@ public class TeamCompetition implements Serializable {
 					classResult.analyzeSplitTimes();
 					List<Result> results = classResult.getResults();
 					for (Result result : results) {
-						if(result.getCompetitorStatus() != CompetitorStatus.OK) {
+						teamCompetitionResults.getPersonStatistics()
+								.saveResult(e.getId(), result);
+						if (result.getCompetitorStatus() != CompetitorStatus.OK) {
 							continue;
 						}
 						if (competingPersons.containsKey(result.getPerson())) {
@@ -202,10 +206,9 @@ public class TeamCompetition implements Serializable {
 									- result.getPerson().getBirthYear();
 							boolean isYoungOrOld = age < 13 || age > 64;
 							if (!isYoungOrOld
-									&& getEasyCourses().contains(
-											classResult.getClassName())) {
+									&& getEasyCourses().contains(className)) {
 								// no position bonus, but a static value
-								points += 12;
+								points = 12;
 							} else {
 								// * sijoitus - 0.2/sija (2. -0,2 p, 3. -0,4 p,
 								// …)
@@ -215,7 +218,7 @@ public class TeamCompetition implements Serializable {
 							}
 
 							// * järjestäjänä toimiva saa vakiot väh. 25
-							// pistettä (2
+							// pistettä (
 							// kertaa/kausi)
 							// TODO
 							// personWeekResult.setCourse(classResult.getClassName());
@@ -248,13 +251,15 @@ public class TeamCompetition implements Serializable {
 					if (competingPersons.containsKey(person)) {
 						PersonWeekResult personWeekResult = personalResults
 								.get(person);
-						if (personWeekResult == null
-								|| personWeekResult.getPoints() < 25) {
+						if ((personWeekResult == null
+								|| personWeekResult.getPoints() < 25)
+								&& popc.getCount(person) < 4) {
 							personWeekResult = new PersonWeekResult();
 							personWeekResult.setCourse("Järj.");
 							personWeekResult.setPoints(25);
 							personWeekResult.setPos(1);
 							personalResults.put(person, personWeekResult);
+							popc.increment(person);
 						}
 					}
 				}
@@ -303,6 +308,7 @@ public class TeamCompetition implements Serializable {
 				}
 			}
 		}
+		teamCompetitionResults.getPersonStatistics().getPersonStatistics();
 		return teamCompetitionResults;
 	}
 
