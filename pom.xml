@@ -3,10 +3,15 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.peimari</groupId>
 	<artifactId>iofdomain</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>IOF Domain model</name>
 	<packaging>jar</packaging>
 	<description>Simplified domain model for IOF XML files. Simple pojos that can be used by Java and GWT-Java codes. The dtd for iof xml is so complicated that jaxb style generation is almost impossible.</description>
+
+	<properties>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
 
 	<build>
 		<resources>

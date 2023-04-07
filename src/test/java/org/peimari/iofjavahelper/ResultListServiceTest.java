@@ -23,10 +23,47 @@ public class ResultListServiceTest {
 
 	public static final String SRC_TEST_RESOURCES_TASTI2_XML = "src/test/resources/tasti2.xml";
 
+	public static final String SRC_TEST_RESOURCES_TASTI3_XML = "src/test/resources/iof_from_navisport.xml";
+	public static final String SRC_TEST_RESOURCES_TASTI4_XML = "src/test/resources/iof_from_navisport2.xml";
+	public static final String SRC_TEST_RESOURCES_TASTI5_XML = "src/test/resources/iof_from_navisport3.xml";
+
 	@Test
 	public void test() {
 		ResultList rl = ResultListService.unmarshal(new File(
 				SRC_TEST_RESOURCES_TASTI2_XML));
+		PrintStream out = System.out;
+		writeResults(rl, out);
+		rl.analyzeSplitTimes();
+		writeSplit(rl, out, false);
+		writeSplit(rl, out, true);
+	}
+
+	@Test
+	public void testNavisport() {
+		ResultList rl = ResultListService.unmarshal(new File(
+				SRC_TEST_RESOURCES_TASTI3_XML));
+		PrintStream out = System.out;
+		writeResults(rl, out);
+		rl.analyzeSplitTimes();
+		writeSplit(rl, out, false);
+		writeSplit(rl, out, true);
+	}
+
+	@Test
+	public void testNavisport2() {
+		ResultList rl = ResultListService.unmarshal(new File(
+				SRC_TEST_RESOURCES_TASTI4_XML));
+		PrintStream out = System.out;
+		writeResults(rl, out);
+		rl.analyzeSplitTimes();
+		writeSplit(rl, out, false);
+		writeSplit(rl, out, true);
+	}
+
+	@Test
+	public void testNavisport3() {
+		ResultList rl = ResultListService.unmarshal(new File(
+				SRC_TEST_RESOURCES_TASTI5_XML));
 		PrintStream out = System.out;
 		writeResults(rl, out);
 		rl.analyzeSplitTimes();

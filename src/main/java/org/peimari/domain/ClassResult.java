@@ -66,7 +66,7 @@ public class ClassResult implements Serializable {
 			final int idx = i;
 			Collections.sort(r, new Comparator<Result>() {
 				public int compare(Result o1, Result o2) {
-					if (o2.getCompetitorStatus() == CompetitorStatus.OK
+					if (o1.getCompetitorStatus() == CompetitorStatus.OK
 							&& o2.getCompetitorStatus() == CompetitorStatus.OK) {
 						Long splitTime1;
 						Long splitTime2;
@@ -74,9 +74,6 @@ public class ClassResult implements Serializable {
 							SplitTime splitTime = o1.getSplitTimes().get(idx);
 							splitTime1 = deltas ? splitTime.getDeltaTime()
 									: splitTime.getTime();
-							if (splitTime1 == 0) {
-								return 1;
-							}
 						} else {
 							return 1;
 						}
@@ -84,14 +81,22 @@ public class ClassResult implements Serializable {
 							SplitTime splitTime = o2.getSplitTimes().get(idx);
 							splitTime2 = deltas ? splitTime.getDeltaTime()
 									: splitTime.getTime();
-							if (splitTime2 == 0) {
-								return -1;
-							}
 						} else {
 							return -1;
 						}
+						if (splitTime1 == 0 && splitTime2 == 0) {
+							return 0;
+						}
+						if (splitTime1 == 0) {
+							return 1;
+						}
+						if (splitTime2 == 0) {
+							return -1;
+						}
 						return (int) (splitTime1 - splitTime2);
-					}
+					} else if(o1.getCompetitorStatus() == CompetitorStatus.OK && o2.getCompetitorStatus() != CompetitorStatus.OK) {
+                                               return -1;
+                                           }
 					return 0;
 				}
 			});

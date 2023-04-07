@@ -38,7 +38,7 @@ public class TeamCompetition implements Serializable {
 			if (!contains(e)) {
 				return super.add(e);
 			}
-			throw new RuntimeException("Duplicate person!");
+			throw new RuntimeException("Duplicate person:" + e.getId());
 		}
 	};
 

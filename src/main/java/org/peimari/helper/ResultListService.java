@@ -1,11 +1,15 @@
 package org.peimari.helper;
 
-import java.io.File;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 
 import org.peimari.domain.ClassResult;
 import org.peimari.domain.CompetitorStatus;
@@ -17,13 +21,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 /**
  * A helper class to read iofxml file into apps internal format.
  */
 public class ResultListService {
 
+	static XPath xPath = XPathFactory.newInstance().newXPath();
+
 	public static ResultList unmarshal(File f) {
+		
 		ResultList rl = new ResultList();
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		dbf.setIgnoringComments(true);
@@ -35,7 +43,13 @@ public class ResultListService {
 					"http://apache.org/xml/features/nonvalidating/load-external-dtd",
 					false);
 			DocumentBuilder db = dbf.newDocumentBuilder();
-			Document d = db.parse(f);
+
+			InputStream inputStream= new FileInputStream(f);
+			Reader reader = new InputStreamReader(inputStream,"UTF-8");
+			InputSource is = new InputSource(reader);
+			is.setEncoding("UTF-8");
+
+			Document d = db.parse(is);
 			Element documentElement = d.getDocumentElement();
 			NodeList childNodes = documentElement.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
@@ -81,12 +95,22 @@ public class ResultListService {
 		Element s = (Element) personResult.getElementsByTagName("CompetitorStatus").item(
 				0);
 		String status = s.getAttribute("value");
-		
+		if(status.isEmpty()) {
+			status =  s.getAttribute("Value");
+		}
+
 		result.setCompetitorStatus(CompetitorStatus.valueOf(status.toUpperCase()));
 
 		Element r = (Element) personResult.getElementsByTagName("Result").item(
 				0);
-		Element time = (Element) r.getElementsByTagName("Time").item(0);
+		
+		Element time;
+		try {
+			time = (Element)xPath.evaluate("./Time",
+			        r, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			throw new RuntimeException(e);
+		}
 		result.setTime(parseTime(time));
 		result.setSplitTimes(parseSplits(r.getElementsByTagName("SplitTime")));
 		return result;
