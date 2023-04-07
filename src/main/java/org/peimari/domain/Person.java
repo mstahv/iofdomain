@@ -2,9 +2,9 @@ package org.peimari.domain;
 
 import java.io.Serializable;
 
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlID;
+import jakarta.xml.bind.annotation.XmlAccessType;
+import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlID;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Person implements Serializable {

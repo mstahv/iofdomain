@@ -3,7 +3,6 @@ package org.peimari.helper;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPath;
@@ -11,6 +10,15 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
+
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
+import org.orienteering.datastandard._3.Iof3ClassResult;
+import org.orienteering.datastandard._3.Iof3ResultList;
+import org.orienteering.datastandard._3.Iof3PersonResult;
+import org.orienteering.datastandard._3.Iof3SplitTime;
+import org.orienteering.datastandard._3.PersonRaceResult;
 import org.peimari.domain.ClassResult;
 import org.peimari.domain.CompetitorStatus;
 import org.peimari.domain.Person;
@@ -50,7 +58,14 @@ public class ResultListService {
 			is.setEncoding("UTF-8");
 
 			Document d = db.parse(is);
+
 			Element documentElement = d.getDocumentElement();
+
+			if("http://www.orienteering.org/datastandard/3.0".equals(documentElement.getAttribute("xmlns"))) {
+				// IOF 3.0 handling
+				return unmarshalIof3(f);
+			}
+
 			NodeList childNodes = documentElement.getChildNodes();
 			for (int i = 0; i < childNodes.getLength(); i++) {
 				Node item = childNodes.item(i);
@@ -64,6 +79,57 @@ public class ResultListService {
 			}
 			return rl;
 		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static ResultList unmarshalIof3(File f) {
+		try {
+			JAXBContext jaxbContext = JAXBContext.newInstance(Iof3ResultList.class);
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+			Iof3ResultList rl = (Iof3ResultList) jaxbUnmarshaller.unmarshal(f);
+			ResultList resultList = new ResultList();
+			List<ClassResult> classResults = new ArrayList<ClassResult>();
+			List<Iof3ClassResult> crs = rl.getClassResult();
+			for (Iof3ClassResult cr : crs) {
+				ClassResult classResult = new ClassResult();
+				classResult.setClassName(cr.getClazz().getName());
+				List<Result> results = new ArrayList<Result>();
+				for (Iof3PersonResult pr : cr.getPersonResult()) {
+					Person person = new Person();
+					person.setFirstName(pr.getPerson().getName().getGiven());
+					person.setLastName(pr.getPerson().getName().getFamily());
+					Result result = new Result();
+					result.setPerson(person);
+					PersonRaceResult prr = pr.getResult().get(0);
+					CompetitorStatus status;
+					if(prr.getStatus().value().equals("MissingPunch")) {
+						status = CompetitorStatus.DISQUALIFIED;
+					} else {
+						status = CompetitorStatus.valueOf(prr.getStatus().value().toUpperCase())					;
+					}
+
+					result.setCompetitorStatus(status);
+					if(result.getCompetitorStatus() == CompetitorStatus.OK) {
+						result.setTime(prr.getTime().longValue()*1000);
+						List<Iof3SplitTime> sts = prr.getSplitTime();
+						List<SplitTime> splitTimes = new ArrayList<>();
+						for (Iof3SplitTime st : sts) {
+							SplitTime splitTime = new SplitTime();
+							splitTime.setControlCode(Integer.parseInt(st.getControlCode()));
+							splitTime.setTime(st.getTime().longValue()*1000);
+							splitTimes.add(splitTime);
+						}
+						result.setSplitTimes(splitTimes);
+					}
+					results.add(result);
+				}
+				classResult.setResults(results);
+				classResults.add(classResult);
+			}
+			resultList.setClassResults(classResults);
+			return resultList;
+		} catch (JAXBException e) {
 			throw new RuntimeException(e);
 		}
 	}

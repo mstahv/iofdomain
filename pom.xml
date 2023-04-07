@@ -1,51 +1,48 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>org.peimari</groupId>
-	<artifactId>iofdomain</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
-	<name>IOF Domain model</name>
-	<packaging>jar</packaging>
-	<description>Simplified domain model for IOF XML files. Simple pojos that can be used by Java and GWT-Java codes. The dtd for iof xml is so complicated that jaxb style generation is almost impossible.</description>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.peimari</groupId>
+    <artifactId>iofdomain</artifactId>
+    <version>0.0.3-SNAPSHOT</version>
+    <name>IOF Domain model</name>
+    <packaging>jar</packaging>
+    <description>Simplified domain model for IOF XML files. Simple pojos that can be used by Java and GWT-Java codes. The dtd for iof xml is so complicated that jaxb style generation is almost impossible.</description>
 
-	<properties>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-	</properties>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
-	<build>
-		<resources>
-			<!-- Package this sources and .gwt.xml files to make this compatible with 
-				GWT -->
-			<resource>
-				<directory>src/main/java</directory>
-				<includes>
-					<include>**/*.java</include>
-					<include>**/*.gwt.xml</include>
-				</includes>
-			</resource>
-		</resources>
-	</build>
-
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.8.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.1</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>1.7.2</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-impl</artifactId>
+            <version>4.0.1</version>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.11.0</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>1.7.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 </project>

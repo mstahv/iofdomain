@@ -27,6 +27,8 @@ public class ResultListServiceTest {
 	public static final String SRC_TEST_RESOURCES_TASTI4_XML = "src/test/resources/iof_from_navisport2.xml";
 	public static final String SRC_TEST_RESOURCES_TASTI5_XML = "src/test/resources/iof_from_navisport3.xml";
 
+	public static final String SRC_TEST_RESOURCES_IOF_XML_3_NAVISPORT = "src/test/resources/iof3_from_navisport.xml";
+
 	@Test
 	public void test() {
 		ResultList rl = ResultListService.unmarshal(new File(
@@ -70,6 +72,18 @@ public class ResultListServiceTest {
 		writeSplit(rl, out, false);
 		writeSplit(rl, out, true);
 	}
+
+	@Test
+	public void test_iof3_from_navisport() {
+		ResultList rl = ResultListService.unmarshal(new File(
+				SRC_TEST_RESOURCES_IOF_XML_3_NAVISPORT));
+		PrintStream out = System.out;
+		writeResults(rl, out);
+		rl.analyzeSplitTimes();
+		writeSplit(rl, out, false);
+		writeSplit(rl, out, true);
+	}
+
 
 	private void writeResults(ResultList rl, PrintStream out) {
 		for (ClassResult cl : rl.getClassResults()) {
