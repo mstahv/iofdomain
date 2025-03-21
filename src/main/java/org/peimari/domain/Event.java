@@ -18,11 +18,13 @@ public class Event implements Serializable {
 	private String map = "";
 	private Location guidance = new Location();
 	private Location location = new Location();
+	private Location karttalaatikko = new Location();
 	private String comments = "";
 	private String storyTitle = "";
 	private String story = "";
 	private String shortStory = "";
 	private boolean resultsVisible;
+	private String liveloxEventId = "";
 
 	@XmlElement(name = "organizer")
 	@XmlIDREF
@@ -116,4 +118,19 @@ public class Event implements Serializable {
 		this.shortStory = shortStory;
 	}
 
+	public Location getKarttalaatikko() {
+		return karttalaatikko;
+	}
+
+	public void setKarttalaatikko(Location karttalaatikko) {
+		this.karttalaatikko = karttalaatikko;
+	}
+
+	public String getLiveloxEventId() {
+		return liveloxEventId;
+	}
+
+	public void setLiveloxEventId(String liveloxEventId) {
+		this.liveloxEventId = liveloxEventId;
+	}
 }
