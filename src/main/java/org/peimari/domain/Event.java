@@ -19,7 +19,10 @@ public class Event implements Serializable {
 	private Location guidance = new Location();
 	private Location location = new Location();
 	private Location karttalaatikko = new Location();
+	private Location omatoimiP = new Location();
 	private String comments = "";
+	private String commentsYo = "";
+	private String commentsOmatoimi = "";
 	private String storyTitle = "";
 	private String story = "";
 	private String shortStory = "";
@@ -132,5 +135,29 @@ public class Event implements Serializable {
 
 	public void setLiveloxEventId(String liveloxEventId) {
 		this.liveloxEventId = liveloxEventId;
+	}
+
+	public Location getOmatoimiP() {
+		return omatoimiP;
+	}
+
+	public void setOmatoimiP(Location omatoimiP) {
+		this.omatoimiP = omatoimiP;
+	}
+
+	public String getCommentsYo() {
+		return commentsYo;
+	}
+
+	public void setCommentsYo(String commentsYo) {
+		this.commentsYo = commentsYo;
+	}
+
+	public String getCommentsOmatoimi() {
+		return commentsOmatoimi;
+	}
+
+	public void setCommentsOmatoimi(String commentsOmatoimi) {
+		this.commentsOmatoimi = commentsOmatoimi;
 	}
 }

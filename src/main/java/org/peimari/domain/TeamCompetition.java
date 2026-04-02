@@ -124,7 +124,7 @@ public class TeamCompetition implements Serializable {
 					List<Result> results = classResult.getResults();
 					for (Result result : results) {
 						teamCompetitionResults.getPersonStatistics()
-								.saveResult(e.getId(), result);
+								.saveResult(e.getId(), result, classResult.getClassName());
 						if (result.getCompetitorStatus() != CompetitorStatus.OK) {
 							continue;
 						}
@@ -313,10 +313,16 @@ public class TeamCompetition implements Serializable {
 
 	private Map<Person, Person> getCompetingPersons() {
 		Map<Person, Person> hashSet = new HashMap<Person, Person>();
+		// Previosly probably only those in joukkuepeimari were calculated 🤔
+		/*
 		for (Team t : getTeams()) {
 			for (Person p : t.getPersons()) {
 				hashSet.put(p, p);
 			}
+		}
+		 */
+		for(Person p : getPersons()) {
+			hashSet.put(p, p);
 		}
 		return hashSet;
 	}

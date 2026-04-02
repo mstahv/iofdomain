@@ -16,6 +16,7 @@ public class Person implements Serializable {
 	private int birthYear;
 	private Level level = Level.X;
 	private boolean female = false;
+	private boolean kmKisa;
 
 	public String getId() {
 		return id;
@@ -95,4 +96,11 @@ public class Person implements Serializable {
 		return 0;
 	}
 
+	public boolean isKmKisa() {
+		return kmKisa;
+	}
+
+	public void setKmKisa(boolean kmKisa) {
+		this.kmKisa = kmKisa;
+	}
 }

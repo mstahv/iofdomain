@@ -21,7 +21,7 @@ public class PersonStatistics {
 	
 	PersonStatisticsEntry[] persons;
 
-	public void saveResult(String eventId, Result result) {
+	public void saveResult(String eventId, Result result, String className) {
 		Person p = result.getPerson();
 		PersonStatisticsEntry personEntry = personIdToEntry.get(p.getId());
 		if (personEntry == null) {
@@ -29,7 +29,7 @@ public class PersonStatistics {
 			personEntry.setPerson(p);
 			personIdToEntry.put(p.getId(), personEntry);
 		}
-		personEntry.saveResult(eventId);
+		personEntry.saveResult(eventId, className);
 	}
 	
 	public int totalRunners() {
