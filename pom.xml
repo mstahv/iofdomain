@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>in.virit</groupId>
     <artifactId>iofdomain</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>IOF Domain model</name>
     <packaging>jar</packaging>
     <description>Simplified domain model for IOF XML files. Simple pojos that can be used by Java and GWT-Java codes. The dtd for iof xml is so complicated that jaxb style generation is almost impossible.</description>
@@ -19,7 +19,7 @@
         <url>https://github.com/mstahv/iofdomain</url>
         <connection>scm:git:git://github.com/mstahv/iofdomain.git</connection>
         <developerConnection>scm:git:ssh://git@github.com:/mstahv/iofdomain.git</developerConnection>
-        <tag>iofdomain-0.0.3</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <issueManagement>
